@@ -4,7 +4,7 @@
 #include "hc_q.h"
 
 typedef struct hc_bst {
-    struct hc_node* root;
+    struct node* root;
 } hc_bst;
 
 hc_bst* hc_bst_init();

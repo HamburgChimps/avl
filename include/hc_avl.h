@@ -5,7 +5,7 @@
 #include "hc_q.h"
 
 typedef struct hc_avl {
-    struct hc_node* root;
+    struct node* root;
 
 } hc_avl;
 

@@ -4,36 +4,36 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct hc_node {
-    struct hc_node* left;
-    struct hc_node* right;
+typedef struct node {
+    struct node* left;
+    struct node* right;
     const char* key;
     const char* value;
-} hc_node;
+} node;
 
-static hc_node* hc_node_init(const char* k, const char* v) {
-    hc_node* node = malloc(sizeof(hc_node));
-    node->left = NULL;
-    node->right = NULL;
+static node* node_init(const char* k, const char* v) {
+    node* n = malloc(sizeof(node));
+    n->left = NULL;
+    n->right = NULL;
 
-    node->key = k;
-    node->value = v;
+    n->key = k;
+    n->value = v;
 
-    return node;
+    return n;
 }
 
-static void hc_node_print(hc_node* n) {
+static void node_print(node* n) {
     printf("\n----------------------------------------------\n");
     printf("Key: %s\n", n->key);
     printf("Value: %s", n->value);
     printf("\n----------------------------------------------\n");
 }
 
-static void hc_node_destroy(hc_node** n) {
+static void node_destroy(node** n) {
     if (*n == NULL) return;
 
-    if ((*n)->left != NULL) hc_node_destroy(&(*n)->left);
-    if ((*n)->right != NULL) hc_node_destroy(&(*n)->right);
+    if ((*n)->left != NULL) node_destroy(&(*n)->left);
+    if ((*n)->right != NULL) node_destroy(&(*n)->right);
 
     free(*n);
     *n = NULL;
@@ -45,9 +45,9 @@ hc_bst* hc_bst_init() {
     return tree;
 }
 
-static void hc_bst_insert_worker(hc_node** n, const char* k, const char* v) {
+static void hc_bst_insert_worker(node** n, const char* k, const char* v) {
     if (*n == NULL) {
-        *n = hc_node_init(k, v);
+        *n = node_init(k, v);
         return;
     }
 
@@ -65,7 +65,7 @@ void hc_bst_insert(hc_bst* t, const char* k, const char* v) {
     hc_bst_insert_worker(&t->root, k, v);
 }
 
-static hc_node** hc_bst_get_worker(hc_node** n, const char* k) {
+static node** hc_bst_get_worker(node** n, const char* k) {
     if (*n == NULL) return NULL;
 
     int cmp_res = strcmp(k, (*n)->key);
@@ -79,44 +79,44 @@ static hc_node** hc_bst_get_worker(hc_node** n, const char* k) {
 const char* hc_bst_get(hc_bst* t, const char* k) {
     if (k == NULL) return NULL;
 
-    hc_node** n = hc_bst_get_worker(&t->root, k);
+    node** n = hc_bst_get_worker(&t->root, k);
 
     if (n == NULL) return NULL;
     return (*n)->value;
 }
 
-static void hc_bst_traverse_pre_order(hc_node* n) {
+static void hc_bst_traverse_pre_order(node* n) {
     if (n == NULL) return;
 
-    hc_node_print(n);
+    node_print(n);
     hc_bst_traverse_pre_order(n->left);
     hc_bst_traverse_pre_order(n->right);
 }
 
-static void hc_bst_traverse_in_order(hc_node* n) {
+static void hc_bst_traverse_in_order(node* n) {
     if (n == NULL) return;
 
     hc_bst_traverse_in_order(n->left);
-    hc_node_print(n);
+    node_print(n);
     hc_bst_traverse_in_order(n->right);
 }
 
-static void hc_bst_traverse_post_order(hc_node* n) {
+static void hc_bst_traverse_post_order(node* n) {
     if (n == NULL) return;
 
     hc_bst_traverse_post_order(n->left);
     hc_bst_traverse_post_order(n->right);
-    hc_node_print(n);
+    node_print(n);
 }
 
-static void hc_bst_traverse_level_order(hc_node* n) {
+static void hc_bst_traverse_level_order(node* n) {
     hc_q* traversal_queue = hc_q_init(5);
     hc_q_enqueue(traversal_queue, n);
 
-    hc_node* visitor = NULL;
+    node* visitor = NULL;
 
-    while ((visitor = (hc_node*)hc_q_dequeue(traversal_queue))) {
-        hc_node_print(visitor);
+    while ((visitor = (node*)hc_q_dequeue(traversal_queue))) {
+        node_print(visitor);
         if (visitor->left) hc_q_enqueue(traversal_queue, visitor->left);
         if (visitor->right) hc_q_enqueue(traversal_queue, visitor->right);
     }
@@ -132,22 +132,22 @@ void hc_bst_traverse(hc_bst* t, int order_flag) {
     if (order_flag == 2) return hc_bst_traverse_level_order(t->root);
 }
 
-static hc_node** get_in_order_successor_worker(hc_node** n) {
+static node** get_in_order_successor_worker(node** n) {
     if ((*n)->left == NULL) return n;
 
     return get_in_order_successor_worker(n);
 }
 
-static hc_node** get_in_order_successor(hc_node** n) {
+static node** get_in_order_successor(node** n) {
     if (*n == NULL) return NULL;
     if ((*n)->right == NULL) return NULL;
 
     return get_in_order_successor_worker(&(*n)->right);
 }
 
-static int is_leaf(hc_node* n) { return n->left == NULL && n->right == NULL; }
+static int is_leaf(node* n) { return n->left == NULL && n->right == NULL; }
 
-static int get_height_worker(hc_node* n, int h) {
+static int get_height_worker(node* n, int h) {
     if (n == NULL) return h;
 
     ++h;
@@ -165,11 +165,11 @@ static int get_height_worker(hc_node* n, int h) {
 int hc_bst_get_height(hc_bst* t) { return get_height_worker(t->root, 0); }
 
 void hc_bst_delete_key(hc_bst* t, const char* k) {
-    hc_node** n = hc_bst_get_worker(&t->root, k);
+    node** n = hc_bst_get_worker(&t->root, k);
 
     if (n == NULL) return;
     if ((*n)->left == NULL && (*n)->right == NULL) {
-        return hc_node_destroy(n);
+        return node_destroy(n);
     }
     if ((*n)->left == NULL && (*n)->right != NULL) {
         free(*n);
@@ -189,12 +189,12 @@ void hc_bst_delete_key(hc_bst* t, const char* k) {
         return;
     }
 
-    hc_node** s = get_in_order_successor(n);
+    node** s = get_in_order_successor(n);
     (*n)->key = (*s)->key;
     (*n)->value = (*s)->value;
 
     if (is_leaf(*s)) {
-        hc_node_destroy(s);
+        node_destroy(s);
         return;
     }
 
@@ -211,11 +211,11 @@ void hc_bst_delete_key(hc_bst* t, const char* k) {
     }
 }
 
-static void hc_bst_print_worker(hc_node* n, const char* node_addr) {
+static void hc_bst_print_worker(node* n, const char* node_addr) {
     if (n == NULL) return;
 
     printf("Node: %s\n", node_addr);
-    hc_node_print(n);
+    node_print(n);
     printf("\n\n");
     fflush(stdout);
 
@@ -237,7 +237,7 @@ static void hc_bst_print_worker(hc_node* n, const char* node_addr) {
 void hc_bst_print(hc_bst* t) { hc_bst_print_worker(t->root, "root"); }
 
 void hc_bst_destroy(hc_bst** t) {
-    hc_node_destroy(&(*t)->root);
+    node_destroy(&(*t)->root);
     free(*t);
     *t = NULL;
 }
