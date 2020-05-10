@@ -1,6 +1,6 @@
 # The HamburgChimps AVL Tree
 
-A reference implementation of an AVL tree in c.
+An implementation of an AVL tree in c.
 
 For demonstration purposes, this repo contains a test harness and a Makefile to compile and link the avl implementation and test harness. You can then execute the test harness with `/.hc_avl_test`. This assumes an OS with `make` and `gcc`. 
 
