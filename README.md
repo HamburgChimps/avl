@@ -2,17 +2,17 @@
 
 A reference implementation of an AVL tree in c.
 
-For demonstration purposes, this repo contains a test harness and a Makefile to compile and link the BST implementation and test harness. You can then execute the test harness with `/.hc_avl_test`. This assumes an OS with `make` and `gcc`. 
+For demonstration purposes, this repo contains a test harness and a Makefile to compile and link the avl implementation and test harness. You can then execute the test harness with `/.hc_avl_test`. This assumes an OS with `make` and `gcc`. 
 
 ## API
 
 ### `hc_avl_init() -> hc_avl*`
 
-Initialize a BST for usage.
+Initialize an AVL tree for usage.
 
 ### `hc_avl_insert(hc_avl* t, const char* k, const char* v) -> void`
 
-Insert into a BST `t` a node with key `k` and value `v`.
+Insert into the `t` a node with key `k` and value `v`.
 
 ### `hc_avl_get(hc_avl* t, const char* k) -> const char* v`
 
@@ -44,7 +44,7 @@ Deletes the node with key `k` in the tree `t`, if it exists.
 
 ### `hc_avl_print(hc_avl* t) -> void`
 
-Print the contents of a BST `t`.
+Print the contents of the tree `t`.
 
 ### `hc_avl_destroy(hc_avl** t) -> void`
 
