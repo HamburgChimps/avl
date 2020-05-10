@@ -1,9 +1,9 @@
-#include "hc_avl.h"
-
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "hc_avl.h"
 
 #define TEST_KEYS_SIZE 10
 
@@ -23,19 +23,19 @@ int main() {
         hc_avl_insert(tree, test_keys[i], NULL);
     }
 
-    // assert(hc_avl_get_height(tree) == 7);
-    // assert(hc_avl_get(tree, "z") == "zebra");
+    assert(hc_avl_get_height(tree) == 7);
+    assert(hc_avl_get(tree, "z") == "zebra");
 
-    // printf("\n\n================ Pre-Order Traversal ================\n");
-    // hc_avl_traverse(tree, -1);
-    // printf("\n\n================ In-Order Traversal ================\n");
-    // hc_avl_traverse(tree, 0);
-    // printf("\n\n================ Post-Order Traversal ================\n");
-    // hc_avl_traverse(tree, 1);
-    // printf("\n\n================ Level-Order Traversal ================\n");
-    // hc_avl_traverse(tree, 2);
+    printf("\n\n================ Pre-Order Traversal ================\n");
+    hc_avl_traverse(tree, -1);
+    printf("\n\n================ In-Order Traversal ================\n");
+    hc_avl_traverse(tree, 0);
+    printf("\n\n================ Post-Order Traversal ================\n");
+    hc_avl_traverse(tree, 1);
+    printf("\n\n================ Level-Order Traversal ================\n");
+    hc_avl_traverse(tree, 2);
 
-    // hc_avl_delete_key(tree, "y");
+    hc_avl_delete_key(tree, "y");
 
     printf("\n\n================ Final State of Tree ================\n");
     hc_avl_print(tree);
