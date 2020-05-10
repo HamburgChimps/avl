@@ -11,9 +11,9 @@ typedef struct hc_avl {
 
 hc_avl* hc_avl_init();
 
-void hc_avl_insert(const char* k, const char* v);
+void hc_avl_insert(hc_avl* t, const char* k, const char* v);
 
-const char* hc_avl_get(const char* k);
+const char* hc_avl_get(hc_avl* t, const char* k);
 
 void hc_avl_traverse(hc_avl* t, int order_flag);
 

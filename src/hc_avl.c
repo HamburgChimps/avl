@@ -45,6 +45,17 @@ hc_avl* hc_avl_init() {
     return tree;
 }
 
+static void rebalance_if_needed(hc_avl* t) {
+    // TODO
+}
+
+void hc_avl_insert(hc_avl* t, const char* k, const char* v) {
+    hc_bst_insert((hc_bst*)t, k, v);
+    rebalance_if_needed(t);
+}
+
+void hc_avl_print(hc_avl* t) { hc_bst_print((hc_bst*)t); }
+
 void hc_avl_destroy(hc_avl** t) {
     node_destroy(&(*t)->root);
     free(*t);
