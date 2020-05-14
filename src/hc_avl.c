@@ -45,14 +45,7 @@ hc_avl* hc_avl_init() {
     return tree;
 }
 
-static void rebalance_if_needed(hc_avl* t) {
-    // TODO
-}
-
-void hc_avl_insert(hc_avl* t, const char* k, const char* v) {
-    hc_bst_insert((hc_bst*)t, k, v);
-    rebalance_if_needed(t);
-}
+void hc_avl_insert(hc_avl* t, const char* k, const char* v) {}
 
 const char* hc_avl_get(hc_avl* t, const char* k) {
     return hc_bst_get((hc_bst*)t, k);
@@ -64,10 +57,7 @@ void hc_avl_traverse(hc_avl* t, int order_flag) {
 
 int hc_avl_get_height(hc_avl* t) { return hc_bst_get_height((hc_bst*)t); }
 
-void hc_avl_delete_key(hc_avl* t, const char* k) {
-    hc_bst_delete_key((hc_bst*)t, k);
-    rebalance_if_needed(t);
-}
+void hc_avl_delete_key(hc_avl* t, const char* k) {}
 
 void hc_avl_print(hc_avl* t) { hc_bst_print((hc_bst*)t); }
 
