@@ -9,6 +9,7 @@ typedef struct node {
     struct node* right;
     const char* key;
     const char* value;
+    int balance_factor;
 } node;
 
 static node* node_init(const char* k, const char* v) {
@@ -18,6 +19,8 @@ static node* node_init(const char* k, const char* v) {
 
     n->key = k;
     n->value = v;
+
+    n->balance_factor = 0;
 
     return n;
 }
@@ -43,6 +46,43 @@ hc_avl* hc_avl_init() {
     hc_avl* tree = malloc(sizeof(hc_avl));
     tree->root = NULL;
     return tree;
+}
+
+static int height_of_node_worker(node* n, int h) {
+    if (n == NULL) return h;
+
+    ++h;
+
+    int height_left = height_of_node_worker(n->left, h);
+    int height_right = height_of_node_worker(n->right, h);
+
+    if (height_left > height_right || height_left == height_right) {
+        return height_left;
+    }
+
+    return height_right;
+}
+
+static int height_of_node(node* n) { return height_of_node_worker(n, 0); }
+
+static int insert_worker(node** n, const char* k, const char* v) {
+    if (*n == NULL) {
+        *n = node_init(k, v);
+        return (*n)->balance_factor;
+    }
+
+    int cmp_res = strcmp(k, (*n)->key);
+    if (cmp_res < 0) {
+        insert_worker(&(*n)->left, k, v);
+    }
+
+    if (cmp_res > 0) {
+        insert_worker(&(*n)->right, k, v);
+    }
+
+    int balance_factor = (*n)->balance_factor =
+        height_of_node((*n)->right) - height_of_node((*n)->right);
+
 }
 
 void hc_avl_insert(hc_avl* t, const char* k, const char* v) {}
