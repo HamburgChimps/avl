@@ -74,12 +74,10 @@ static int insert_worker(node** n, const char* k, const char* v) {
     int cmp_res = strcmp(k, (*n)->key);
     if (cmp_res < 0) {
         insert_worker(&(*n)->left, k, v);
-        --(*n)->balance_factor;
     }
 
     if (cmp_res > 0) {
         insert_worker(&(*n)->right, k, v);
-        ++(*n)->balance_factor;
     }
 }
 
