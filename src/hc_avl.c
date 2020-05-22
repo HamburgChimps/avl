@@ -65,10 +65,10 @@ static int height_of_node_worker(node* n, int h) {
 
 static int height_of_node(node* n) { return height_of_node_worker(n, 0); }
 
-static int insert_worker(node** n, const char* k, const char* v) {
+static void insert_worker(node** n, const char* k, const char* v) {
     if (*n == NULL) {
         *n = node_init(k, v);
-        return (*n)->balance_factor;
+        return;
     }
 
     int cmp_res = strcmp(k, (*n)->key);
@@ -79,10 +79,6 @@ static int insert_worker(node** n, const char* k, const char* v) {
     if (cmp_res > 0) {
         insert_worker(&(*n)->right, k, v);
     }
-
-    int balance_factor = (*n)->balance_factor =
-        height_of_node((*n)->right) - height_of_node((*n)->right);
-
 }
 
 void hc_avl_insert(hc_avl* t, const char* k, const char* v) {}
