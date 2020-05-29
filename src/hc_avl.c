@@ -28,7 +28,8 @@ static node* node_init(const char* k, const char* v) {
 static void node_print(node* n) {
     printf("\n----------------------------------------------\n");
     printf("Key: %s\n", n->key);
-    printf("Value: %s", n->value);
+    printf("Value: %s\n", n->value);
+    printf("Balance Factor: %i", n->balance_factor);
     printf("\n----------------------------------------------\n");
 }
 
@@ -74,14 +75,18 @@ static void insert_worker(node** n, const char* k, const char* v) {
     int cmp_res = strcmp(k, (*n)->key);
     if (cmp_res < 0) {
         insert_worker(&(*n)->left, k, v);
+        --(*n)->balance_factor;
     }
 
     if (cmp_res > 0) {
         insert_worker(&(*n)->right, k, v);
+        ++(*n)->balance_factor;
     }
 }
 
-void hc_avl_insert(hc_avl* t, const char* k, const char* v) {}
+void hc_avl_insert(hc_avl* t, const char* k, const char* v) {
+    insert_worker(&t->root, k, v);
+}
 
 const char* hc_avl_get(hc_avl* t, const char* k) {
     return hc_bst_get((hc_bst*)t, k);
@@ -95,7 +100,7 @@ int hc_avl_get_height(hc_avl* t) { return hc_bst_get_height((hc_bst*)t); }
 
 void hc_avl_delete_key(hc_avl* t, const char* k) {}
 
-void hc_avl_print(hc_avl* t) { hc_bst_print((hc_bst*)t); }
+void hc_avl_print(hc_avl* t) { hc_bst_print((hc_bst*)t, node_print); }
 
 void hc_avl_destroy(hc_avl** t) {
     node_destroy(&(*t)->root);

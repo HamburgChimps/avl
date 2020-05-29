@@ -19,7 +19,7 @@ int hc_bst_get_height(hc_bst* t);
 
 void hc_bst_delete_key(hc_bst* t, const char* k);
 
-void hc_bst_print(hc_bst* t);
+void hc_bst_print(hc_bst* t, void (*node_printer)(struct node*));
 
 void hc_bst_destroy(hc_bst** t);
 

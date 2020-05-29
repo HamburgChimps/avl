@@ -12,16 +12,16 @@ int main() {
 
     assert(tree->root == NULL);
 
-    // const char* test_keys[TEST_KEYS_SIZE] = {"m", "a", "y", "o", "z",
-    //                                         "b", "c", "d", "e", "f"};
+    const char* test_keys[TEST_KEYS_SIZE] = {"m", "a", "y", "o", "z",
+                                             "b", "c", "d", "e", "f"};
 
-    // for (int i = 0; i < TEST_KEYS_SIZE; ++i) {
-    //    if (strcmp(test_keys[i], "z") == 0) {
-    //        hc_avl_insert(tree, test_keys[i], "zebra");
-    //        continue;
-    //    }
-    //    hc_avl_insert(tree, test_keys[i], NULL);
-    // }
+    for (int i = 0; i < TEST_KEYS_SIZE; ++i) {
+        if (strcmp(test_keys[i], "z") == 0) {
+            hc_avl_insert(tree, test_keys[i], "zebra");
+            continue;
+        }
+        hc_avl_insert(tree, test_keys[i], NULL);
+    }
 
     // assert(hc_avl_get_height(tree) == 7);
     // assert(hc_avl_get(tree, "z") == "zebra");
