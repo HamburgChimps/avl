@@ -82,6 +82,8 @@ static void insert_worker(node** n, const char* k, const char* v) {
         insert_worker(&(*n)->right, k, v);
         ++(*n)->balance_factor;
     }
+
+    if ((-1 <= (*n)->balance_factor) && ((*n)->balance_factor <= 1)) return;
 }
 
 void hc_avl_insert(hc_avl* t, const char* k, const char* v) {
