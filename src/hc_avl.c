@@ -73,17 +73,30 @@ static void insert_worker(node** n, const char* k, const char* v) {
     }
 
     int cmp_res = strcmp(k, (*n)->key);
+    // rotations also have to update balance factors of affected nodes
     if (cmp_res < 0) {
         insert_worker(&(*n)->left, k, v);
         --(*n)->balance_factor;
+        if ((*n)->balance_factor < -1) {
+            if ((*n)->left->balance_factor > 1) {
+                // double left rotation
+                return;
+            }
+            // left rotation
+        }
     }
 
     if (cmp_res > 0) {
         insert_worker(&(*n)->right, k, v);
         ++(*n)->balance_factor;
+        if ((*n)->balance_factor > 1) {
+            if ((*n)->right->balance_factor < 1) {
+                // double right rotation
+                return;
+            }
+            // right rotation
+        }
     }
-
-    if ((-1 <= (*n)->balance_factor) && ((*n)->balance_factor <= 1)) return;
 }
 
 void hc_avl_insert(hc_avl* t, const char* k, const char* v) {
