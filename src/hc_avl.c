@@ -73,7 +73,6 @@ static void insert_worker(node** n, const char* k, const char* v) {
     }
 
     int cmp_res = strcmp(k, (*n)->key);
-    // rotations also have to update balance factors of affected nodes
     if (cmp_res < 0) {
         insert_worker(&(*n)->left, k, v);
         --(*n)->balance_factor;
@@ -82,7 +81,11 @@ static void insert_worker(node** n, const char* k, const char* v) {
                 // double right rotation
                 return;
             }
-            // right rotation
+            node* fulcrum = *n;
+            *n = (*n)->left;
+            fulcrum->left = (*n)->right;
+            (*n)->right = fulcrum;
+            // figure out balance factor calculations
         }
     }
 
@@ -94,7 +97,11 @@ static void insert_worker(node** n, const char* k, const char* v) {
                 // double left rotation
                 return;
             }
-            // left rotation
+            node* fulcrum = *n;
+            *n = (*n)->right;
+            fulcrum->right = (*n)->left;
+            (*n)->left = fulcrum;
+            // figure out balance factor calculations
         }
     }
 }
