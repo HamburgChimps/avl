@@ -85,7 +85,7 @@ static void insert_worker(node** n, const char* k, const char* v) {
             *n = (*n)->left;
             fulcrum->left = (*n)->right;
             (*n)->right = fulcrum;
-            // figure out balance factor calculations
+            (*n)->balance_factor = 0;
         }
     }
 
@@ -101,7 +101,7 @@ static void insert_worker(node** n, const char* k, const char* v) {
             *n = (*n)->right;
             fulcrum->right = (*n)->left;
             (*n)->left = fulcrum;
-            // figure out balance factor calculations
+            (*n)->balance_factor = 0;
         }
     }
 }
