@@ -66,6 +66,22 @@ static int height_of_node_worker(node* n, int h) {
 
 static int height_of_node(node* n) { return height_of_node_worker(n, 0); }
 
+static void rotate_left(node** root) {
+    node* old_root = *root;
+    *root = (*root)->right;
+    old_root->right = (*root)->left;
+    (*root)->left = old_root;
+    (*root)->balance_factor = 0;
+}
+
+static void rotate_right(node** root) {
+    node* old_root = *root;
+    *root = (*root)->left;
+    old_root->left = (*root)->right;
+    (*root)->right = old_root;
+    (*root)->balance_factor = 0;
+}
+
 static void insert_worker(node** n, const char* k, const char* v) {
     if (*n == NULL) {
         *n = node_init(k, v);
@@ -78,14 +94,9 @@ static void insert_worker(node** n, const char* k, const char* v) {
         --(*n)->balance_factor;
         if ((*n)->balance_factor < -1) {
             if ((*n)->left->balance_factor > 1) {
-                // double right rotation
-                return;
+                rotate_right(&(*n)->left);
             }
-            node* fulcrum = *n;
-            *n = (*n)->left;
-            fulcrum->left = (*n)->right;
-            (*n)->right = fulcrum;
-            (*n)->balance_factor = 0;
+            rotate_right(n);
         }
     }
 
@@ -94,14 +105,9 @@ static void insert_worker(node** n, const char* k, const char* v) {
         ++(*n)->balance_factor;
         if ((*n)->balance_factor > 1) {
             if ((*n)->right->balance_factor < 1) {
-                // double left rotation
-                return;
+                rotate_left(&(*n)->right);
             }
-            node* fulcrum = *n;
-            *n = (*n)->right;
-            fulcrum->right = (*n)->left;
-            (*n)->left = fulcrum;
-            (*n)->balance_factor = 0;
+            rotate_left(n);
         }
     }
 }
