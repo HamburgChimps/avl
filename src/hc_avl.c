@@ -94,7 +94,7 @@ static void insert_worker(node** n, const char* k, const char* v) {
         --(*n)->balance_factor;
         if ((*n)->balance_factor < -1) {
             if ((*n)->left->balance_factor > 1) {
-                rotate_right(&(*n)->left);
+                rotate_left(&(*n)->left);
             }
             rotate_right(n);
         }
@@ -105,7 +105,7 @@ static void insert_worker(node** n, const char* k, const char* v) {
         ++(*n)->balance_factor;
         if ((*n)->balance_factor > 1) {
             if ((*n)->right->balance_factor < 1) {
-                rotate_left(&(*n)->right);
+                rotate_right(&(*n)->right);
             }
             rotate_left(n);
         }
