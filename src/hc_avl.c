@@ -72,7 +72,6 @@ static void rotate_left(node** root) {
     old_root->right = (*root)->left;
     (*root)->left = old_root;
     (*root)->balance_factor = 0;
-    old_root->balance_factor = 0;
 }
 
 static void rotate_right(node** root) {
@@ -81,7 +80,6 @@ static void rotate_right(node** root) {
     old_root->left = (*root)->right;
     (*root)->right = old_root;
     (*root)->balance_factor = 0;
-    old_root->balance_factor = 0;
 }
 
 static void insert_worker(node** n, const char* k, const char* v) {
