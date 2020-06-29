@@ -12,7 +12,7 @@ int main() {
 
     assert(tree->root == NULL);
 
-    const char* test_keys[TEST_KEYS_SIZE] = {"a", "b", "c"};
+    const char* test_keys[TEST_KEYS_SIZE] = {"a", "c", "b"};
 
     for (int i = 0; i < TEST_KEYS_SIZE; ++i) {
         if (strcmp(test_keys[i], "z") == 0) {
