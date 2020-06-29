@@ -5,15 +5,15 @@
 
 #include "hc_avl.h"
 
-#define TEST_KEYS_SIZE 6
+#define TEST_KEYS_SIZE 5
 
 int main() {
     hc_avl* tree = hc_avl_init();
 
     assert(tree->root == NULL);
 
-    const char* test_keys[TEST_KEYS_SIZE] = {
-        "m", "a", "y", "o", "z", "b"};  //, "c", "d", "e", "f"};
+    const char* test_keys[TEST_KEYS_SIZE] = {"m", "a", "y", "o",
+                                             "z"};  //, "c", "d", "e", "f"};
 
     for (int i = 0; i < TEST_KEYS_SIZE; ++i) {
         if (strcmp(test_keys[i], "z") == 0) {
