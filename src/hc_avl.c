@@ -93,7 +93,11 @@ static void insert_worker(node** n, const char* k, const char* v) {
         insert_worker(&(*n)->left, k, v);
         --(*n)->balance_factor;
         if ((*n)->balance_factor < -1) {
+            printf("I am rotating right at %s\n", (*n)->key);
+            fflush(stdout);
             if ((*n)->left->balance_factor > 1) {
+                printf("leftright at %s\n", (*n)->left->key);
+                fflush(stdout);
                 rotate_left(&(*n)->left);
             }
             rotate_right(n);
@@ -104,7 +108,11 @@ static void insert_worker(node** n, const char* k, const char* v) {
         insert_worker(&(*n)->right, k, v);
         ++(*n)->balance_factor;
         if ((*n)->balance_factor > 1) {
-            if ((*n)->right->balance_factor < 1) {
+            printf("I am rotating left at %s\n", (*n)->key);
+            fflush(stdout);
+            if ((*n)->right->balance_factor < -1) {
+                printf("rightleft at %s\n", (*n)->right->key);
+                fflush(stdout);
                 rotate_right(&(*n)->right);
             }
             rotate_left(n);
