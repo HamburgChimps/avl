@@ -66,6 +66,10 @@ static int height_of_node_worker(node* n, int h) {
 
 static int height_of_node(node* n) { return height_of_node_worker(n, 0); }
 
+static void calc_balance_factor(node* n) {
+    n->balance_factor = height_of_node(n->right) - height_of_node(n->left);
+}
+
 static void rotate_left(node** root) {
     node* old_root = *root;
     *root = (*root)->right;
@@ -91,7 +95,7 @@ static void insert_worker(node** n, const char* k, const char* v) {
     int cmp_res = strcmp(k, (*n)->key);
     if (cmp_res < 0) {
         insert_worker(&(*n)->left, k, v);
-        --(*n)->balance_factor;
+        calc_balance_factor(*n);
         if ((*n)->balance_factor < -1) {
             printf("I am rotating right at %s\n", (*n)->key);
             fflush(stdout);
@@ -106,7 +110,7 @@ static void insert_worker(node** n, const char* k, const char* v) {
 
     if (cmp_res > 0) {
         insert_worker(&(*n)->right, k, v);
-        ++(*n)->balance_factor;
+        calc_balance_factor(*n);
         if ((*n)->balance_factor > 1) {
             printf("I am rotating left at %s\n", (*n)->key);
             fflush(stdout);
