@@ -138,7 +138,52 @@ void hc_avl_traverse(hc_avl* t, int order_flag) {
 
 int hc_avl_get_height(hc_avl* t) { return hc_bst_get_height((hc_bst*)t); }
 
-void hc_avl_delete_key(hc_avl* t, const char* k) {}
+void hc_avl_delete_key(hc_avl* t, const char* k) {
+    node** n = hc_bst_get(t, k);
+
+/*    if (n == NULL) return;
+    if ((*n)->left == NULL && (*n)->right == NULL) {
+        return node_destroy(n);
+    }
+    if ((*n)->left == NULL && (*n)->right != NULL) {
+        free(*n);
+        if (*n == t->root) {
+            t->root = (*n)->right;
+        }
+        *n = (*n)->right;
+        return;
+    }
+
+    if ((*n)->left != NULL && (*n)->right == NULL) {
+        free(*n);
+        if (*n == t->root) {
+            t->root = (*n)->right;
+        }
+        *n = (*n)->left;
+        return;
+    }
+
+    node** s = get_in_order_successor(n);
+    (*n)->key = (*s)->key;
+    (*n)->value = (*s)->value;
+
+    if (is_leaf(*s)) {
+        node_destroy(s);
+        return;
+    }
+
+    if ((*s)->left != NULL) {
+        free(*s);
+        *s = (*s)->left;
+        return;
+    }
+
+    if ((*s)->right != NULL) {
+        free(*s);
+        *s = (*s)->right;
+        return;
+    } */
+}
 
 void hc_avl_print(hc_avl* t) { hc_bst_print((hc_bst*)t, node_print); }
 
