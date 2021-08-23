@@ -1,11 +1,18 @@
 #ifndef HC_AVL_H
 #define HC_AVL_H
 
-#include "hc_bst.h"
 #include "hc_q.h"
 
+typedef struct hc_avl_node {
+    struct hc_avl_node* left;
+    struct hc_avl_node* right;
+    const char* key;
+    const char* value;
+    int balance_factor;
+} hc_avl_node;
+
 typedef struct hc_avl {
-    struct node* root;
+    hc_avl_node* root;
 
 } hc_avl;
 

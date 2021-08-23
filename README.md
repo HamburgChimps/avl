@@ -14,12 +14,6 @@ Initialize an AVL tree for usage.
 
 Insert into the `t` a node with key `k` and value `v`.
 
-### `hc_avl_get(hc_avl* t, const char* k) -> const char* v`
-
-Returns the value `v` for the node with key `k` in the tree `t`. If the tree `t` does not
-contain the key `k` then this function returns `NULL`. This function also returns `NULL` if
-the given key `k` is `NULL`.
-
 ### `hc_avl_traverse(hc_avl* t, int order_flag) -> void`
 
 Traverse the given tree `t` in the order indicated by `order_flag` and print each node's key and value along the way.
