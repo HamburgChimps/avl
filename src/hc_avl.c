@@ -192,7 +192,7 @@ void hc_avl_traverse(hc_avl* t, int order_flag) {
 static hc_avl_node** get_in_order_successor_worker(hc_avl_node** n) {
     if ((*n)->left == NULL) return n;
 
-    return get_in_order_successor_worker(n);
+    return get_in_order_successor_worker(&(*n)->left);
 }
 
 static hc_avl_node** get_in_order_successor(hc_avl_node** n) {
