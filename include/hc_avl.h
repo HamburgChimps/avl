@@ -18,6 +18,7 @@ typedef struct hc_avl {
 
 hc_avl* hc_avl_init();
 
+// TODO: handle duplicates
 void hc_avl_insert(hc_avl* t, const char* k, const char* v);
 
 const char* hc_avl_get(hc_avl* t, const char* k);
