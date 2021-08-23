@@ -301,7 +301,6 @@ static void delete_key_worker(hc_avl* t, hc_avl_node** n, const char* k) {
     }
 }
 
-// TODO: this doesn't work properly yet, balance factor is off in root for current version of driver
 void hc_avl_delete_key(hc_avl* t, const char* k) {
     delete_key_worker(t, &t->root, k);
 }
