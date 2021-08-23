@@ -223,51 +223,87 @@ static int get_height_worker(hc_avl_node* n, int h) {
 
 int hc_avl_get_height(hc_avl* t) { return get_height_worker(t->root, 0); }
 
+static void delete_key_worker(hc_avl* t, hc_avl_node** n, const char* k) {
+    int cmp_res = strcmp(k, (*n)->key);
+
+    if (cmp_res == 0) {
+        if (is_leaf(*n)) {
+            return node_destroy(n);
+        }
+        if ((*n)->left == NULL && (*n)->right != NULL) {
+            free(*n);
+            if (*n == t->root) {
+                t->root = (*n)->right;
+            }
+            *n = (*n)->right;
+            return;
+        }
+
+        if ((*n)->left != NULL && (*n)->right == NULL) {
+            free(*n);
+            if (*n == t->root) {
+                t->root = (*n)->left;
+            }
+            *n = (*n)->left;
+            return;
+        }
+
+        hc_avl_node** s = get_in_order_successor(n);
+        (*n)->key = (*s)->key;
+        (*n)->value = (*s)->value;
+
+        if (is_leaf(*s)) {
+            node_destroy(s);
+            return;
+        }
+
+        if ((*s)->left != NULL) {
+            free(*s);
+            *s = (*s)->left;
+            return;
+        }
+
+        if ((*s)->right != NULL) {
+            free(*s);
+            *s = (*s)->right;
+            return;
+        }
+    }
+
+    if (cmp_res < 0) {
+        delete_key_worker(t, &(*n)->left, k);
+        calc_balance_factor(*n);
+        if ((*n)->balance_factor < -1) {
+            printf("I am rotating right at %s\n", (*n)->key);
+            fflush(stdout);
+            if ((*n)->left->balance_factor > 1) {
+                printf("leftright at %s\n", (*n)->left->key);
+                fflush(stdout);
+                rotate_left(&(*n)->left);
+            }
+            rotate_right(n);
+        }
+    }
+
+    if (cmp_res > 0) {
+        delete_key_worker(t, &(*n)->right, k);
+        calc_balance_factor(*n);
+        if ((*n)->balance_factor > 1) {
+            printf("I am rotating left at %s\n", (*n)->key);
+            fflush(stdout);
+            if ((*n)->right->balance_factor < -1) {
+                printf("rightleft at %s\n", (*n)->right->key);
+                fflush(stdout);
+                rotate_right(&(*n)->right);
+            }
+            rotate_left(n);
+        }
+    }
+}
+
+// TODO: this doesn't work properly yet
 void hc_avl_delete_key(hc_avl* t, const char* k) {
-    hc_avl_node** n = hc_avl_get_worker(&t->root, k);
-
-    if (n == NULL) return;
-    if (is_leaf(*n)) {
-        return node_destroy(n);
-    }
-    if ((*n)->left == NULL && (*n)->right != NULL) {
-        free(*n);
-        if (*n == t->root) {
-            t->root = (*n)->right;
-        }
-        *n = (*n)->right;
-        return;
-    }
-
-    if ((*n)->left != NULL && (*n)->right == NULL) {
-        free(*n);
-        if (*n == t->root) {
-            t->root = (*n)->left;
-        }
-        *n = (*n)->left;
-        return;
-    }
-
-    hc_avl_node** s = get_in_order_successor(n);
-    (*n)->key = (*s)->key;
-    (*n)->value = (*s)->value;
-
-    if (is_leaf(*s)) {
-        node_destroy(s);
-        return;
-    }
-
-    if ((*s)->left != NULL) {
-        free(*s);
-        *s = (*s)->left;
-        return;
-    }
-
-    if ((*s)->right != NULL) {
-        free(*s);
-        *s = (*s)->right;
-        return;
-    }
+    delete_key_worker(t, &t->root, k);
 }
 
 static void hc_avl_print_worker(hc_avl_node* n, const char* node_addr) {
