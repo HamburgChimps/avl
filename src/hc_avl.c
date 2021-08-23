@@ -227,7 +227,7 @@ void hc_avl_delete_key(hc_avl* t, const char* k) {
     hc_avl_node** n = hc_avl_get_worker(&t->root, k);
 
     if (n == NULL) return;
-    if ((*n)->left == NULL && (*n)->right == NULL) {
+    if (is_leaf(*n)) {
         return node_destroy(n);
     }
     if ((*n)->left == NULL && (*n)->right != NULL) {
