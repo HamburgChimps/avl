@@ -202,6 +202,10 @@ static hc_avl_node** get_in_order_successor(hc_avl_node** n) {
     return get_in_order_successor_worker(&(*n)->right);
 }
 
+static int is_leaf(hc_avl_node* n) {
+    return n->left == NULL && n->right == NULL;
+}
+
 static int get_height_worker(hc_avl_node* n, int h) {
     if (n == NULL) return h;
 
@@ -220,50 +224,50 @@ static int get_height_worker(hc_avl_node* n, int h) {
 int hc_avl_get_height(hc_avl* t) { return get_height_worker(t->root, 0); }
 
 void hc_avl_delete_key(hc_avl* t, const char* k) {
-    // hc_avl_node** n = hc_avl_get(t, k);
+    hc_avl_node** n = hc_avl_get_worker(&t->root, k);
 
-    /*    if (n == NULL) return;
-        if ((*n)->left == NULL && (*n)->right == NULL) {
-            return node_destroy(n);
+    if (n == NULL) return;
+    if ((*n)->left == NULL && (*n)->right == NULL) {
+        return node_destroy(n);
+    }
+    if ((*n)->left == NULL && (*n)->right != NULL) {
+        free(*n);
+        if (*n == t->root) {
+            t->root = (*n)->right;
         }
-        if ((*n)->left == NULL && (*n)->right != NULL) {
-            free(*n);
-            if (*n == t->root) {
-                t->root = (*n)->right;
-            }
-            *n = (*n)->right;
-            return;
+        *n = (*n)->right;
+        return;
+    }
+
+    if ((*n)->left != NULL && (*n)->right == NULL) {
+        free(*n);
+        if (*n == t->root) {
+            t->root = (*n)->left;
         }
+        *n = (*n)->left;
+        return;
+    }
 
-        if ((*n)->left != NULL && (*n)->right == NULL) {
-            free(*n);
-            if (*n == t->root) {
-                t->root = (*n)->right;
-            }
-            *n = (*n)->left;
-            return;
-        }
+    hc_avl_node** s = get_in_order_successor(n);
+    (*n)->key = (*s)->key;
+    (*n)->value = (*s)->value;
 
-        node** s = get_in_order_successor(n);
-        (*n)->key = (*s)->key;
-        (*n)->value = (*s)->value;
+    if (is_leaf(*s)) {
+        node_destroy(s);
+        return;
+    }
 
-        if (is_leaf(*s)) {
-            node_destroy(s);
-            return;
-        }
+    if ((*s)->left != NULL) {
+        free(*s);
+        *s = (*s)->left;
+        return;
+    }
 
-        if ((*s)->left != NULL) {
-            free(*s);
-            *s = (*s)->left;
-            return;
-        }
-
-        if ((*s)->right != NULL) {
-            free(*s);
-            *s = (*s)->right;
-            return;
-        } */
+    if ((*s)->right != NULL) {
+        free(*s);
+        *s = (*s)->right;
+        return;
+    }
 }
 
 static void hc_avl_print_worker(hc_avl_node* n, const char* node_addr) {
