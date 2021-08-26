@@ -49,12 +49,6 @@ static int height_of_node_worker(hc_avl_node* n, int h) {
     int height_left = height_of_node_worker(n->left, h);
     int height_right = height_of_node_worker(n->right, h);
 
-    if (strcmp(n->key, "z") == 0) {
-        printf("left: %i\n", height_left);
-        printf("right: %i\n", height_right);
-        fflush(stdout);
-    }
-
     if (height_left >= height_right) {
         return height_left;
     }
@@ -95,9 +89,6 @@ static void insert_worker(hc_avl_node** n, const char* k, const char* v) {
         return;
     }
 
-    printf("Balance factor of %s is %i\n", (*n)->key, (*n)->balance_factor);
-    fflush(stdout);
-
     int cmp_res = strcmp(k, (*n)->key);
     if (cmp_res < 0) {
         insert_worker(&(*n)->left, k, v);
@@ -108,6 +99,9 @@ static void insert_worker(hc_avl_node** n, const char* k, const char* v) {
     }
 
     calc_balance_factor(*n);
+
+    printf("Balance factor of %s is %i\n", (*n)->key, (*n)->balance_factor);
+    fflush(stdout);
 
     if ((*n)->balance_factor < -1) {
         printf("I am rotating right at %s\n", (*n)->key);
@@ -268,21 +262,19 @@ static void delete_key_worker(hc_avl* t, hc_avl_node** n, const char* k) {
         (*n)->key = (*s)->key;
         (*n)->value = (*s)->value;
 
+        // TOOD: find a better way to structure this logic
         if (is_leaf(*s)) {
             node_destroy(s);
-            return;
         }
 
-        if ((*s)->left != NULL) {
+        else if ((*s)->left != NULL) {
             free(*s);
             *s = (*s)->left;
-            return;
         }
 
-        if ((*s)->right != NULL) {
+        else if ((*s)->right != NULL) {
             free(*s);
             *s = (*s)->right;
-            return;
         }
     }
 
