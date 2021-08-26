@@ -230,7 +230,7 @@ static int get_height_worker(hc_avl_node* n, int h) {
     int height_left = get_height_worker(n->left, h);
     int height_right = get_height_worker(n->right, h);
 
-    if (height_left > height_right || height_left == height_right) {
+    if (height_left >= height_right) {
         return height_left;
     }
 
