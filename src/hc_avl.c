@@ -49,7 +49,13 @@ static int height_of_node_worker(hc_avl_node* n, int h) {
     int height_left = height_of_node_worker(n->left, h);
     int height_right = height_of_node_worker(n->right, h);
 
-    if (height_left > height_right || height_left == height_right) {
+    if (strcmp(n->key, "z") == 0) {
+        printf("left: %i\n", height_left);
+        printf("right: %i\n", height_right);
+        fflush(stdout);
+    }
+
+    if (height_left >= height_right) {
         return height_left;
     }
 
@@ -69,7 +75,8 @@ static void rotate_left(hc_avl_node** root) {
     *root = (*root)->right;
     old_root->right = (*root)->left;
     (*root)->left = old_root;
-    (*root)->balance_factor = 0;
+    calc_balance_factor(*root);
+    calc_balance_factor(old_root);
 }
 
 static void rotate_right(hc_avl_node** root) {
@@ -77,48 +84,57 @@ static void rotate_right(hc_avl_node** root) {
     *root = (*root)->left;
     old_root->left = (*root)->right;
     (*root)->right = old_root;
-    (*root)->balance_factor = 0;
+    calc_balance_factor(*root);
+    calc_balance_factor(old_root);
 }
 
 static void insert_worker(hc_avl_node** n, const char* k, const char* v) {
+    fflush(stdout);
     if (*n == NULL) {
         *n = node_init(k, v);
         return;
     }
 
+    printf("Balance factor of %s is %i\n", (*n)->key, (*n)->balance_factor);
+    fflush(stdout);
+
     int cmp_res = strcmp(k, (*n)->key);
     if (cmp_res < 0) {
         insert_worker(&(*n)->left, k, v);
-        calc_balance_factor(*n);
-        if ((*n)->balance_factor < -1) {
-            printf("I am rotating right at %s\n", (*n)->key);
-            fflush(stdout);
-            if ((*n)->left->balance_factor > 1) {
-                printf("leftright at %s\n", (*n)->left->key);
-                fflush(stdout);
-                rotate_left(&(*n)->left);
-            }
-            rotate_right(n);
-        }
     }
 
     if (cmp_res > 0) {
         insert_worker(&(*n)->right, k, v);
-        calc_balance_factor(*n);
-        if ((*n)->balance_factor > 1) {
-            printf("I am rotating left at %s\n", (*n)->key);
+    }
+
+    calc_balance_factor(*n);
+
+    if ((*n)->balance_factor < -1) {
+        printf("I am rotating right at %s\n", (*n)->key);
+        fflush(stdout);
+        if ((*n)->left->balance_factor > 1) {
+            printf("leftright at %s\n", (*n)->left->key);
             fflush(stdout);
-            if ((*n)->right->balance_factor < -1) {
-                printf("rightleft at %s\n", (*n)->right->key);
-                fflush(stdout);
-                rotate_right(&(*n)->right);
-            }
-            rotate_left(n);
+            rotate_left(&(*n)->left);
         }
+        rotate_right(n);
+    }
+
+    if ((*n)->balance_factor > 1) {
+        printf("I am rotating left at %s\n", (*n)->key);
+        fflush(stdout);
+        if ((*n)->right->balance_factor < -1) {
+            printf("rightleft at %s\n", (*n)->right->key);
+            fflush(stdout);
+            rotate_right(&(*n)->right);
+        }
+        rotate_left(n);
     }
 }
 
 void hc_avl_insert(hc_avl* t, const char* k, const char* v) {
+    printf("inserting %s\n", k);
+    fflush(stdout);
     insert_worker(&t->root, k, v);
 }
 
@@ -272,32 +288,34 @@ static void delete_key_worker(hc_avl* t, hc_avl_node** n, const char* k) {
 
     if (cmp_res < 0) {
         delete_key_worker(t, &(*n)->left, k);
-        calc_balance_factor(*n);
-        if ((*n)->balance_factor < -1) {
-            printf("I am rotating right at %s\n", (*n)->key);
-            fflush(stdout);
-            if ((*n)->left->balance_factor > 1) {
-                printf("leftright at %s\n", (*n)->left->key);
-                fflush(stdout);
-                rotate_left(&(*n)->left);
-            }
-            rotate_right(n);
-        }
     }
 
     if (cmp_res > 0) {
         delete_key_worker(t, &(*n)->right, k);
-        calc_balance_factor(*n);
-        if ((*n)->balance_factor > 1) {
-            printf("I am rotating left at %s\n", (*n)->key);
+    }
+
+    calc_balance_factor(*n);
+
+    if ((*n)->balance_factor < -1) {
+        printf("I am rotating right at %s\n", (*n)->key);
+        fflush(stdout);
+        if ((*n)->left->balance_factor > 1) {
+            printf("leftright at %s\n", (*n)->left->key);
             fflush(stdout);
-            if ((*n)->right->balance_factor < -1) {
-                printf("rightleft at %s\n", (*n)->right->key);
-                fflush(stdout);
-                rotate_right(&(*n)->right);
-            }
-            rotate_left(n);
+            rotate_left(&(*n)->left);
         }
+        rotate_right(n);
+    }
+
+    if ((*n)->balance_factor > 1) {
+        printf("I am rotating left at %s\n", (*n)->key);
+        fflush(stdout);
+        if ((*n)->right->balance_factor < -1) {
+            printf("rightleft at %s\n", (*n)->right->key);
+            fflush(stdout);
+            rotate_right(&(*n)->right);
+        }
+        rotate_left(n);
     }
 }
 
