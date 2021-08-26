@@ -83,7 +83,6 @@ static void rotate_right(hc_avl_node** root) {
 }
 
 static void insert_worker(hc_avl_node** n, const char* k, const char* v) {
-    fflush(stdout);
     if (*n == NULL) {
         *n = node_init(k, v);
         return;
@@ -100,8 +99,6 @@ static void insert_worker(hc_avl_node** n, const char* k, const char* v) {
 
     calc_balance_factor(*n);
 
-    printf("Balance factor of %s is %i\n", (*n)->key, (*n)->balance_factor);
-    fflush(stdout);
 
     if ((*n)->balance_factor < -1) {
         printf("I am rotating right at %s\n", (*n)->key);
