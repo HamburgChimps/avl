@@ -19,7 +19,6 @@ typedef struct hc_avl {
 hc_avl* hc_avl_init();
 
 // TODO: handle duplicates
-// TODO: balance factor calculation is off
 void hc_avl_insert(hc_avl* t, const char* k, const char* v);
 
 const char* hc_avl_get(hc_avl* t, const char* k);
@@ -29,7 +28,6 @@ void hc_avl_traverse(hc_avl* t, int order_flag);
 int hc_avl_get_height(hc_avl* t);
 
 // TODO: handle duplicates
-// TODO: balance factor calculation is off
 void hc_avl_delete_key(hc_avl* t, const char* k);
 
 void hc_avl_print(hc_avl* t);
