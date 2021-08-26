@@ -49,6 +49,12 @@ static int height_of_node_worker(hc_avl_node* n, int h) {
     int height_left = height_of_node_worker(n->left, h);
     int height_right = height_of_node_worker(n->right, h);
 
+    if (strcmp(n->key, "z") == 0) {
+        printf("left: %i\n", height_left);
+        printf("right: %i\n", height_right);
+        fflush(stdout);
+    }
+
     if (height_left >= height_right) {
         return height_left;
     }
